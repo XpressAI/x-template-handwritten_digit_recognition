@@ -1,21 +1,35 @@
-# Xircuits Project Template
+# Xircuits Handwritten Digit Classifier Template
 
-A Xircuits Project Template is a project that utilizes the Xircuits engine, whether it is training a model or running a workflow.
+This template allows you to train a handwritten digit classifier, using the [Mnist Handwritten Digit Classification Dataset](https://www.tensorflow.org/api_docs/python/tf/keras/datasets/mnist/load_data). 
 
-This section should have a short description on what is does.
+It consists of the components needed to build and train a model:
+- Download dataset from official website: 'mnist' or 'fashion_mnist'
+- Visualize the training data (optional)
+- Building model: specify loss and optimizer
+- Training model: specify epochs, batch size, and validation percentage for validation set
+- Evaluate model
+- Save model: in keras or tensorflow format
+- Convert TF model to onnx model to be used in other platforms
 
 ## Prerequisites
 
-A project may have prerequisites such as models that needs to be downloaded or non-python related setup. You may list them down here.
+You will need Python 3.9+.
 
 ## Installation
 
+1. Clone this repository
+2. Create virtual environments and install the required python packages.
 ```
 pip install -r requirements.txt
 ```
+3. Run xircuits from the root directory
+```
+xircuits
+```
 
-## Updating Xircuits Project Template
-```
-git remote add template https://github.com/XpressAI/xircuits-project-template
-git fetch --all
-```
+## Workflow in this Template
+
+#### mnist_classifier_template.xircuits
+
+
+

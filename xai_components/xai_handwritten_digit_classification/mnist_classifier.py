@@ -139,10 +139,10 @@ class TrainModel(Component):
         batch_size = self.batch_size.value
         validation_split = self.validation_split.value
         
-        model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=validation_split)
+        history = model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=validation_split)
         
         self.model.value = model
-        
+        ctx.update({'train_history': history.history})
         self.done = True
 
 #------------------------------------------------------------------------------
@@ -173,6 +173,44 @@ class EvaluateModel(Component):
         print(classification_report(y_test, y_pred, digits=10))
         
         self.done = True
+ 
+#------------------------------------------------------------------------------
+#                    Xircuits Component : PlotTrainingMetrics
+#------------------------------------------------------------------------------
+@xai_component
+class PlotTrainingMetrics(Component):
+
+    def __init__(self):
+        self.done = False
+    
+    def execute(self, ctx) -> None:
+        import matplotlib.pyplot as plt
+        history = ctx['train_history']
+
+        acc = history['accuracy']
+        val_acc = history['val_accuracy']
+
+        loss = history['loss']
+        val_loss = history['val_loss']
+        
+        plt.figure(figsize=(8, 8))
+        plt.subplot(2, 1, 1)
+        plt.plot(acc, label='Training Accuracy')
+        plt.plot(val_acc, label='Validation Accuracy')
+        plt.ylim([0, 1])
+        plt.legend(loc='lower right')
+        plt.title('Training and Validation Accuracy')
+
+        plt.subplot(2, 1, 2)
+        plt.plot(loss, label='Training Loss')
+        plt.plot(val_loss, label='Validation Loss')
+        plt.ylim([0, 1.0])
+        plt.legend(loc='upper right')
+        plt.title('Training and Validation Loss')
+        plt.xlabel('epoch')
+        plt.show()
+
+        self.done = True
         
 #------------------------------------------------------------------------------
 #                    Xircuits Component : SaveModel
@@ -194,9 +232,10 @@ class SaveModel(Component):
         model = self.model.value
         model_name = self.model_name.value
         
-        path = os.path.split(model_name)
-        if len(path) > 1:
-            os.makedirs(path[0], exist_ok=True)
+        dirname = os.path.dirname(model_name)
+        
+        if len(dirname):
+            os.makedirs(dirname, exist_ok=True)
         
         if self.keras_format.value:
             model_name = model_name + '.h5'
@@ -204,7 +243,7 @@ class SaveModel(Component):
             model_name = model_name
         model.save(model_name)
         print(f"Saving model at: {model_name}")
-        
+        ctx.update({'saved_model_path': model_name})
         self.done = True
 
 #------------------------------------------------------------------------------
@@ -212,20 +251,21 @@ class SaveModel(Component):
 #------------------------------------------------------------------------------
 @xai_component
 class ConvertTFModelToOnnx(Component):
-    tf_model_path: InArg[str]
+    output_model: InArg[str]
     
     def __init__(self):
         self.done = False
-        self.tf_model_path = InArg(None)
+        self.output_model = InArg(None)
         
     def execute(self, ctx):
         import os
-        model_path = self.tf_model_path.value
-        path = os.path.split(model_path)
-        if len(path) > 1:
-            os.makedirs(path[0], exist_ok=True)
+        saved_model = ctx['saved_model_path']
+        model_path = self.output_model.value
+        dirname = os.path.dirname(model_path)
+        if len(dirname):
+            os.makedirs(dirname, exist_ok=True)
             
-        os.system(f"python -m tf2onnx.convert --saved-model {model_path} --opset 11 --output {model_path}.onnx")
-        print(f'Converted {model_path} TF model to {model_path}.onnx')
+        os.system(f"python -m tf2onnx.convert --saved-model {saved_model} --opset 11 --output {model_path}.onnx")
+        print(f'Converted {saved_model} TF model to {model_path}.onnx')
         
         self.done = True

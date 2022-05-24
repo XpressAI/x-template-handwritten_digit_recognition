@@ -17,7 +17,7 @@ test('Should complete E2E test', async ({
   await page.locator('[aria-label="File\\ Browser\\ Section"] >> text=xircuits-workflows').dblclick();
   
   // Click text=KerasModelPredict.xircuits
-  await page.locator('text=example_workflow.xircuits').dblclick()
+  await page.locator('text=mnist_classifier_template.xircuits').dblclick()
 
   page.once('dialog', dialog => {
     console.log(`Dialog message: ${dialog.message()}`);

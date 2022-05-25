@@ -218,19 +218,19 @@ class PlotTrainingMetrics(Component):
 @xai_component
 class SaveModel(Component):
     model: InArg[any]
-    model_name: InArg[str]
+    save_model_path: InArg[str]
     keras_format: InArg[bool]
     
     def __init__(self):
         self.done = False
         self.model = InArg(None)
-        self.model_name = InArg(None)
+        self.save_model_path = InArg(None)
         self.keras_format = InArg(False)
     
     def execute(self, ctx):
         import os
         model = self.model.value
-        model_name = self.model_name.value
+        model_name = self.save_model_path.value
         
         dirname = os.path.dirname(model_name)
         
@@ -251,21 +251,21 @@ class SaveModel(Component):
 #------------------------------------------------------------------------------
 @xai_component
 class ConvertTFModelToOnnx(Component):
-    output_model: InArg[str]
+    output_onnx_path: InArg[str]
     
     def __init__(self):
         self.done = False
-        self.output_model = InArg(None)
+        self.output_onnx_path = InArg(None)
         
     def execute(self, ctx):
         import os
         saved_model = ctx['saved_model_path']
-        model_path = self.output_model.value
-        dirname = os.path.dirname(model_path)
+        onnx_path = self.output_onnx_path.value
+        dirname = os.path.dirname(onnx_path)
         if len(dirname):
             os.makedirs(dirname, exist_ok=True)
             
-        os.system(f"python -m tf2onnx.convert --saved-model {saved_model} --opset 11 --output {model_path}.onnx")
-        print(f'Converted {saved_model} TF model to {model_path}.onnx')
+        os.system(f"python -m tf2onnx.convert --saved-model {saved_model} --opset 11 --output {onnx_path}.onnx")
+        print(f'Converted {saved_model} TF model to {onnx_path}.onnx')
         
         self.done = True

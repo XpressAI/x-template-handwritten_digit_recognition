@@ -37,3 +37,7 @@ xircuits
 ## Workflow in this Template
 
 #### mnist_classifier_template.xircuits
+
+- In this template we used the mnist dataset from Tensorflow and perform a simple classification. You can further fine tune the model by modifying the hyperparameters.
+
+![Template](images/mnist_template.gif)

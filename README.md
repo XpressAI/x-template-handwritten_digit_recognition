@@ -1,21 +1,43 @@
-# Xircuits Project Template
+# Xircuits Handwritten Digit Classifier Template
 
-A Xircuits Project Template is a project that utilizes the Xircuits engine, whether it is training a model or running a workflow.
+This template allows you to train a handwritten digit classifier, using the [Mnist Handwritten Digit Classification Dataset](https://www.tensorflow.org/api_docs/python/tf/keras/datasets/mnist/load_data).
 
-This section should have a short description on what is does.
+- Dataset preparation: this section handles the dataset used in this template through multiple components.
+
+  - `DownloadDataset` : download mnist dataset.
+  - `VisualizeData` : visualize the training data (optional)
+
+- Model training: build and compile the model for training.
+  - `CreateModel` : building a simple convolutional model.
+  - `TrainModel` : training the model with training dataset.
+  - `PlotTrainingMetrics` : evaluate training performance, by plotting the training loss and accuracy against the number of training epochs.
+  - `EvaluateModel` : determine the model loss and accuracy based on the testing dataset.
+  - `SaveModel` : save model in keras or tensorflow format.
+  - `ConvertTFModelToOnnx` : convert TF model to onnx model to be used in other platforms.
 
 ## Prerequisites
 
-A project may have prerequisites such as models that needs to be downloaded or non-python related setup. You may list them down here.
+You will need Python 3.9+.
 
 ## Installation
+
+1. Clone this repository
+2. Create virtual environments and install the required python packages.
 
 ```
 pip install -r requirements.txt
 ```
 
-## Updating Xircuits Project Template
+3. Run xircuits from the root directory
+
 ```
-git remote add template https://github.com/XpressAI/xircuits-project-template
-git fetch --all
+xircuits
 ```
+
+## Workflow in this Template
+
+#### mnist_classifier_template.xircuits
+
+- In this template we used the mnist dataset from Tensorflow and perform a simple classification. You can further fine tune the model by modifying the hyperparameters.
+
+![Template](images/mnist_template.gif)

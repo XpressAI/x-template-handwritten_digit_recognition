@@ -1,1 +1,6 @@
 xircuits
+tensorflow==2.9.0
+matplotlib
+numpy
+scikit-learn
+tf2onnx

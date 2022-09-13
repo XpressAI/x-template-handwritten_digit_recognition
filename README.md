@@ -1,4 +1,4 @@
-# Xircuits Handwritten Digit Classifier Template
+# Xircuits Handwritten Digit Classifier Project Template
 
 This template allows you to train a handwritten digit classifier, using the [Mnist Handwritten Digit Classification Dataset](https://www.tensorflow.org/api_docs/python/tf/keras/datasets/mnist/load_data).
 
